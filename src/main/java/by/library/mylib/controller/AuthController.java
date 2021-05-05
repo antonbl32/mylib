@@ -34,6 +34,13 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
+
+    /**
+     * Enter to authorization
+     * @param loginRequest request for checking
+     * @param result
+     * @return error if denied or 200 with token
+     */
     @PostMapping("/signin")
     public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
                                                    BindingResult result){
@@ -48,6 +55,12 @@ public class AuthController {
         return ResponseEntity.ok(new JWTTokenSuccessResponse(true,jwt));
     }
 
+    /**
+     * Registration
+     * @param signupRequest request for reg.
+     * @param result Object with new User
+     * @return 200 or error
+     */
     @PostMapping("/signup")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest, BindingResult result){
         ResponseEntity<Object> errors=responseErrorValidation.mapValidationService(result);
