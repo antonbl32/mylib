@@ -50,9 +50,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getCurrentUser(Principal principal){
+    public User getCurrentUser(Principal principal) {
         return getUserFromPrincipal(principal);
     }
+
     /**
      * Map input User from principal to User object
      *
@@ -65,7 +66,7 @@ public class UserService {
     }
 
     public User getUserById(long id) {
-        LOG.info("Get user by id "+id);
-        return userRepository.getUserById(id).orElseThrow(()->new UsernameNotFoundException("User with id "+id+" not found."));
+        LOG.info("Get user by id " + id);
+        return userRepository.getUserById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not found."));
     }
 }

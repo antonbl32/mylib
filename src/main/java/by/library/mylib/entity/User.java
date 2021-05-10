@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @ElementCollection(targetClass = ERole.class)
     @CollectionTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"))
     private Set<ERole> roles=new HashSet<>();
-//    set time before save to base
+
     @PrePersist
     protected void onCreate(){
         this.createTime=LocalDateTime.now();

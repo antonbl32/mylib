@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface NoteRepository extends JpaRepository<Note,Long> {
+public interface NoteRepository extends JpaRepository<Note, Long> {
     Optional<List<Note>> getAllByUserId(Long id);
+
     Optional<List<Note>> getAllByOrderByNameDesc();
+
     Optional<Note> getByIdAndUser(Long id, User User);
 }

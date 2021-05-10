@@ -9,7 +9,6 @@ import by.library.mylib.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -55,17 +54,16 @@ public class NoteService {
         return noteRepository.getAllByUserId(user.getId()).orElseThrow(() -> new NoteNotFoundException("No post found"));
     }
 
-    public void deleteNote(Long id,Principal principal){
-        User user=getUserByPrincipal(principal);
-        Optional<Note> note=noteRepository.getByIdAndUser(id,user);
-        if(note.isPresent()){
+    public void deleteNote(Long id, Principal principal) {
+        User user = getUserByPrincipal(principal);
+        Optional<Note> note = noteRepository.getByIdAndUser(id, user);
+        if (note.isPresent()) {
             noteRepository.delete(note.get());
-            LOG.info("Post "+note.get().getName()+" is deleting");
-        }else{
+            LOG.info("Post " + note.get().getName() + " is deleting");
+        } else {
             new NoteNotFoundException("Post not deleted");
         }
     }
-
 
     private User getUserByPrincipal(Principal principal) {
         String username = principal.getName();

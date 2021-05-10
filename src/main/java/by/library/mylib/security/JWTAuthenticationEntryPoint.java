@@ -12,14 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class create entry point authentication with jwt
+ */
 @Component
 public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 
     @Override
-    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        InvalidLoginResponse loginResponse=new InvalidLoginResponse();
-        String jsonLoginResponse=new Gson().toJson(loginResponse);
+    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
+        InvalidLoginResponse loginResponse = new InvalidLoginResponse();
+        String jsonLoginResponse = new Gson().toJson(loginResponse);
         httpServletResponse.setContentType(SecurityConstants.CONTENT_TYPE);
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.getWriter().println(jsonLoginResponse);

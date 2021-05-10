@@ -26,47 +26,68 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 @PreAuthorize(value = "permitAll()")
 public class AuthController {
-    @Autowired
+
     private ResponseErrorValidation responseErrorValidation;
+
     @Autowired
+    public void setResponseErrorValidation(ResponseErrorValidation responseErrorValidation) {
+        this.responseErrorValidation = responseErrorValidation;
+    }
+
     private UserService userService;
+
     @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     private AuthenticationManager authenticationManager;
+
     @Autowired
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
+
     private JWTTokenProvider jwtTokenProvider;
 
+    @Autowired
+    public void setJwtTokenProvider(JWTTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
     /**
-     * Enter to authorization
-     * @param loginRequest request for checking
+     * Enter to authorization with request
+     *
+     * @param loginRequest request for checking user
      * @param result
-     * @return error if denied or 200 with token
+     * @return error if denied or 200 with authorization token
      */
     @PostMapping("/signin")
     public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
-                                                   BindingResult result){
-        ResponseEntity<Object> errors=responseErrorValidation.mapValidationService(result);
-        if(!ObjectUtils.isEmpty(errors)){
+                                                   BindingResult result) {
+        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(result);
+        if (!ObjectUtils.isEmpty(errors)) {
             return errors;
         }
-        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(),loginRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt= SecurityConstants.TOKEN_PREFIX+jwtTokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JWTTokenSuccessResponse(true,jwt));
+        String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
+        return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
     }
 
     /**
-     * Registration
-     * @param signupRequest request for reg.
-     * @param result Object with new User
+     * Registration with request
+     *
+     * @param signupRequest request for registration user.
+     * @param result        Object with new User
      * @return 200 or error
      */
     @PostMapping("/signup")
-    public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest, BindingResult result){
-        ResponseEntity<Object> errors=responseErrorValidation.mapValidationService(result);
-        if(!ObjectUtils.isEmpty(errors)) return errors;
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest, BindingResult result) {
+        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(result);
+        if (!ObjectUtils.isEmpty(errors)) return errors;
         userService.createUser(signupRequest);
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
-
 }
