@@ -1,2 +1,2 @@
 # mylib
-pet project for library of notes with auth JWT, Spring Security, REST, Lombok,Spring JPA
+pet REST project for library of notes with Spring Boot(security,jpa, data rest,session,hibernate validator), Lombok.
